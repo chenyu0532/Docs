@@ -1,1 +1,12 @@
 
+每次在打包的时候proj.android的libs和assets会刷新，如果之前有第三方的.so文件那么就会被刷掉 
+办法：在jni文件夹下新建文件夹prebuilt(名字随意)，里面新建文件夹armabi，把第三方的库拷到里面。
+接着在android.mk文件中LOCAL_PATH := $(call my-dir)的下面加上
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XXX
+LOCAL_SRC_FILES:=prebuilt/$(TARGET_ARCH_ABI)/libXXX.so
+include $(PREBUILT_SHARED_LIBRARY) 
+
+当然需要添加几个，就加多少这个块。 
+如果游戏要支持如armeabi-v7a，那么需要在Application.mk里加上 APP_ABI := armeabi armeabi-v7a，同时在prebuilt里再新建armeabi-v7a 
