@@ -1,4 +1,5 @@
 查看Android应用(apk)签名：找到apk包内的XXXX.RSA文件，命令行：keytool -printcert -file XXXX.RSA查看，一般查看md5就行。
 
 eclispse Java代码提示:
-    Window -> Preferences -> Java -> Editor -> Content Assist  -> Auto Activation -> Auto activation triggers for Java 在输框里输入abcdefghijklmnopqrstuvwxyz
+    Window -> Preferences -> Java -> Editor -> Content Assist  -> Auto Activation -> Auto activation triggers for Java 
+    在输框里输入abcdefghijklmnopqrstuvwxyz
