@@ -4,21 +4,26 @@
 lua调用java
 如：
 	local args = {
-				  idStr,  --string 一般传计费点--可省
+	  	  idStr,  --string 一般传计费点--可省
           true,   --bool  useSms --可省
           true,   --bool  isRepeated--可省
           callback --int luaFunctionId--可省
-				};
+	};
 	local sig = "(Ljava/lang/String;)V";
 	luaj.callStaticMethod(className,"startBuySkin",args,sig);
   
   其中的args sig都是可选参数
   sig可以是I(整数) F(浮点数) Z(布尔值) Ljava/lang/String;(字符串) V(空,用来表示java函数无返回值)
+  className:类名，指的是函数要放在java中的哪个类里
+  "startBuySkin":java里的具体函数
   
  java调lua:
     public static void showYumiAd(final String id)
     sdk中一般都会有调用的回调函数,如成功或失败或其他,在回调函数里使用
     Cocos2dxLuaJavaBridge.callLuaGlobalFunctionWithString("回调到lua里的函数", "所携带的信息string,可以为空");
+ 
+ 形式二:
+ 	
  
  重点注意：
     由于cocos2d-x在android是运行在多线程下的，GL线程负责渲染  UI线程是负责用户界面，所以要特别注意选择适当的线程
