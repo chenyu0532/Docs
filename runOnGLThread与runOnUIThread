@@ -23,7 +23,27 @@ lua调用java
     Cocos2dxLuaJavaBridge.callLuaGlobalFunctionWithString("回调到lua里的函数", "所携带的信息string,可以为空");
  
  形式二:
- 	
+ lua调java:
+	local idStr = tostring(id);
+	local javaMethodName = "showYumiAd"
+	local javaParams = {
+    	idStr,
+    	function(event)--接受来自java端的回调
+			print("当前返回消息播放广告结束")
+	 		G_DISPATCHER:dispatch("playMediaSuccess") 
+    	end
+	}
+	local javaMethodSig = "(Ljava/lang/String;I)V"
+	luaj.callStaticMethod(className, javaMethodName, javaParams, javaMethodSig)
+
+本质跟形式一一样，只不过换了种写法,javaParams中的function是接受java端的函数
+
+java调lua
+	showYumiAd(final String id, final int luaCallBack)
+	aD_lua_call_back_func = luaCallBack
+	
+	Cocos2dxLuaJavaBridge.callLuaFunctionWithString(aD_lua_call_back_func, "回到的参数值");
+	Cocos2dxLuaJavaBridge.releaseLuaFunction(aD_lua_call_back_func);
  
  重点注意：
     由于cocos2d-x在android是运行在多线程下的，GL线程负责渲染  UI线程是负责用户界面，所以要特别注意选择适当的线程
