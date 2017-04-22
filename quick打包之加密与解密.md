@@ -2,7 +2,7 @@
 
 如下：
 
-`    @echo off
+     `@echo off
 
      set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"`
 
