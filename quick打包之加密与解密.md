@@ -8,23 +8,21 @@
 
      if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
 
-rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e
+     rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e
 
-rem 如果写上这句，则会报文件已存在的错误，2.x是可以这样的,3.x不可以
+     rem 如果写上这句，则会报文件已存在的错误，2.x是可以这样的,3.x不可以
 
-echo - encrypto res
+     echo - encrypto res
 
-call F:\Quick-Cocos2dx-Community\quick\bin\encrypt_res.bat -i F:\doodlev3\res -o F:\doodlev3\res_cn -es xxx -ek yyy
+     call F:\Quick-Cocos2dx-Community\quick\bin\encrypt_res.bat -i F:\doodlev3\res -o F:\doodlev3\res_cn -es xxx -ek yyy
 
-echo - encrypto scr
+     echo - encrypto scr
 
-call F:\Quick-Cocos2dx-Community\quick\bin\compile_scripts.bat -i F:\doodlev3\src -o F:\doodlev3\res_cn\game.zip -e xxtea_zip
+     call F:\Quick-Cocos2dx-Community\quick\bin\compile_scripts.bat -i F:\doodlev3\src -o F:\doodlev3\res_cn\game.zip -e     xxtea_zip -es xxx -ek yyy
 
--es xxx -ek yyy
+     echo - build project
 
-echo - build project
-
-call build_native.bat
+     call build_native.bat
 
 ######
 这个地方是要用python写生成一个flist.lua文件，里面包含资源和对应的MD5文件，热更新用，请看"生成热更新之生成flist.lua文件"
