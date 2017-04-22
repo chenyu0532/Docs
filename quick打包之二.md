@@ -1,7 +1,15 @@
 ## 生成资源与对应的MD5(后面的热更新使用)
 
 下面为python代码
-
+	
+	import os
+	import hashlib
+	import string
+	import base64
+	import sys
+	import time
+	import shutil
+	fileary = ["png", "jpg", "plist", "zip", "ccz", "mp3", "mp4", "tmx", "fnt", "lua"]
 	def readFile(path):
     	if os.path.isfile(path): 
         	file = open(path, 'rb')
@@ -73,9 +81,9 @@
     	print("\"flist\" file Path:", path)
     	print("**************************************")
 
-		p = sys.argv[1]	
-		v = sys.argv[2]
-		if __name__ == '__main__':
-		main(p, v)
+	p = sys.argv[1]	
+	v = sys.argv[2]
+	if __name__ == '__main__':
+	main(p, v)
 	
 	
