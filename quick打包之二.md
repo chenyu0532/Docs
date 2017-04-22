@@ -2,8 +2,7 @@
 
 下面为python代码
 
-	p = sys.argv[1]
-	
+	p = sys.argv[1]	
 	v = sys.argv[2]
 	
 	if __name__ == '__main__':
