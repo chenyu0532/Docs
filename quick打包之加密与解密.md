@@ -1,7 +1,7 @@
 windows下为了一键搞定加密，拷贝等功能，特意写了一个bat文件
 如下：
-`@echo off
-set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"
+@echo off
+`set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"`
 
 if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
 rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e
@@ -23,7 +23,7 @@ call build_native.bat
 echo - ok complete!
 
 pause
-`
+
 解释：具体的加密过程看泰然网的开发文档就可以了，很详细。
      res_cn用来存放加密文件和加密资源的，在真机上就是读的这个文件，而默认的是将src和res分别拷贝到assets中，但是现在需要把res_cn拷贝到assets中，所以
      就要修改build_native_release.bat文件
