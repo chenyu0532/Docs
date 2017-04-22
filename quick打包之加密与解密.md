@@ -7,7 +7,7 @@ set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"
 
 if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
 
-rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e
+rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e`
 
 rem 如果写上这句，则会报文件已存在的错误，2.x是可以这样的,3.x不可以
 
@@ -31,7 +31,7 @@ call build_native.bat
 
 echo - ok complete!
 
-pause`
+pause
 
 解释：具体的加密过程看泰然网的开发文档就可以了，很详细。
      res_cn用来存放加密文件和加密资源的，在真机上就是读的这个文件，而默认的是将src和res分别拷贝到assets中，但是现在需要把res_cn拷贝到assets中，所以
