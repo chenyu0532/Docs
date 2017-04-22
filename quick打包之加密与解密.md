@@ -2,9 +2,9 @@
 
 如下：
 
-     `@echo off
+     @echo off
 
-     set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"`
+     set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"
 
      if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
 
@@ -18,19 +18,19 @@
 
      echo - encrypto scr
 
-     call F:\Quick-Cocos2dx-Community\quick\bin\compile_scripts.bat -i F:\doodlev3\src -o F:\doodlev3\res_cn\game.zip -e     xxtea_zip -es xxx -ek yyy
+     call F:\Quick-Cocos2dx-Community\quick\bin\compile_scripts.bat -i F:\doodlev3\src -o F:\doodlev3\res_cn\game.zip -e              xxtea_zip -es xxx -ek yyy
 
      echo - build project
 
      call build_native.bat
 
-######
-这个地方是要用python写生成一个flist.lua文件，里面包含资源和对应的MD5文件，热更新用，请看"生成热更新之生成flist.lua文件"
-######
+     ######
+     这个地方是要用python写生成一个flist.lua文件，里面包含资源和对应的MD5文件，热更新用，请看"生成热更新之生成flist.lua文件"
+     ######
 
-echo - ok complete!
+     echo - ok complete!
 
-pause
+     pause
 
 解释：具体的加密过程看泰然网的开发文档就可以了，很详细。
      res_cn用来存放加密文件和加密资源的，在真机上就是读的这个文件，而默认的是将src和res分别拷贝到assets中，但是现在需要把res_cn拷贝到assets中，所以
