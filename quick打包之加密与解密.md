@@ -1,13 +1,14 @@
-windows下为了一键搞定加密，拷贝等功能，特意写了一个bat文件
+# windows下为了一键搞定加密，拷贝等功能，特意写了一个bat文件
+
 如下：
 
 `@echo off
 
-set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"
+set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"`
 
 if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
 
-rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e`
+rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e
 
 rem 如果写上这句，则会报文件已存在的错误，2.x是可以这样的,3.x不可以
 
