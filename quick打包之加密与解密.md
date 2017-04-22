@@ -1,7 +1,7 @@
 windows下为了一键搞定加密，拷贝等功能，特意写了一个bat文件
 如下：
-`
-@echo off
+
+`@echo off
 set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"`
 
 if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
