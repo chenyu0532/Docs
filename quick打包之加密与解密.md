@@ -6,7 +6,7 @@
 
      set QUICK_COCOS2DX = "%QUICK_V3_ROOT%bin\"`
 
-if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
+     if exist "F:\doodlev3\res_cn" rmdir /s /q "F:\doodlev3\res_cn"
 
 rem xcopy /Y F:\doodlev3\res F:\doodlev3\res_cn\ /e
 
