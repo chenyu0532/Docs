@@ -3,3 +3,5 @@
 eclispse Java代码提示:
     Window -> Preferences -> Java -> Editor -> Content Assist  -> Auto Activation -> Auto activation triggers for Java 
     在输框里输入abcdefghijklmnopqrstuvwxyz
+    
+quick下，播放动画的主体是Sprite,不能是别的比如Node，再一个最好不要把node强转为sprite
