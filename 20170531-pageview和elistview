@@ -2,17 +2,18 @@ quick下出现setx不是内部或外部命令：
   方法：在环境变量，系统变量里 Path添加 %SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem 即可
 
 用cocostudio拼界面
-1.pageView：目前的项目需求是8页数据，每页是4*2个子数据，纯粹用cocostdio来拼则加载会卡顿
+1.pageView：目前的项目需求是8页数据，每页是4*2个子数据，纯粹用cocostdio来拼则加载会卡顿（listvie的原理和这个一样）
   方法：首先需要把资源用异步的方式先加载下 display.addImageAsync(imagePath,callback)
+  接下来：这样可以在子数据的数据量不特别大的时候没有卡顿的感觉
    	self.node = cc.uiloader:load("level.csb"):addTo(self)
-	self.pageView = cc.uiloader:seekNodeByName(self.node, "PageView")
-	self.page = cc.uiloader:seekNodeByName(self.pageView, "page1")
-	self.item = cc.uiloader:seekNodeByName(self.node, "item_node")
+	self.pageView = cc.uiloader:seekNodeByName(self.node, "PageView") ---pageView
+	self.page = cc.uiloader:seekNodeByName(self.pageView, "page1")   
+	self.item = cc.uiloader:seekNodeByName(self.node, "item_node")  ---子数据的模板，是另外一个csb文件
 	local pageSize = self.page:getContentSize()
 	for p = 1, 8 do
 		local index = 0
 		self.page = cc.uiloader:seekNodeByName(self.pageView, "page" .. tostring(p))
-		self.page:addTouchEventListener(function(ref,state)
+		self.page:addTouchEventListener(function(ref,state) ---这是监听容器的翻页动作，由于里面的子数据时要可点击的，所以用scroll来管理滚动时不输出点击结果，静止时输出点击结果
 			if state == 1 then
 				scroll = true
 			elseif state == 3 or state == 0 or state == 2 then
@@ -23,7 +24,7 @@ quick下出现setx不是内部或外部命令：
 		for i = 1, 4 do
 			for j = 1, 2 do
 				index = index + 1
-				local itemClone = self.item:clone()
+				local itemClone = self.item:clone()  ---clone子模板
 				itemClone:setPosition(cc.p(10 + (j - 1) * 268, 670 - (i - 1) * 200 - (i - 1) * 20))
 				itemClone:setName(tostring(p) .. "-" .. tostring(index))
 				self.page:addChild(itemClone)
@@ -31,4 +32,17 @@ quick下出现setx不是内部或外部命令：
 			end
 		end
 	end
-       
+   function SelectLevelLayer:setMessage(item,p,index)
+	local bg = cc.uiloader:seekNodeByName(item, "bg") 
+	bg:setSwallowTouches(false) ----设置成false时在图片上也可以滑动容器，设为true时则触摸吞噬了，在图片上不能滑动容器
+	bg:setTouchEnabled(true)
+	bg:addTouchEventListener(function(sender,event) ----监听触摸效果用这个函数
+		if event == 2 then
+			if not scroll then
+				print(item:getName())
+			end			
+		end
+		return true
+		end)
+
+	end    
