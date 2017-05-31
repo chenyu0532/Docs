@@ -1,0 +1,34 @@
+quick下出现setx不是内部或外部命令：
+  方法：在环境变量，系统变量里 Path添加 %SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem 即可
+
+用cocostudio拼界面
+1.pageView：目前的项目需求是8页数据，每页是4*2个子数据，纯粹用cocostdio来拼则加载会卡顿
+  方法：首先需要把资源用异步的方式先加载下 display.addImageAsync(imagePath,callback)
+   	self.node = cc.uiloader:load("level.csb"):addTo(self)
+	self.pageView = cc.uiloader:seekNodeByName(self.node, "PageView")
+	self.page = cc.uiloader:seekNodeByName(self.pageView, "page1")
+	self.item = cc.uiloader:seekNodeByName(self.node, "item_node")
+	local pageSize = self.page:getContentSize()
+	for p = 1, 8 do
+		local index = 0
+		self.page = cc.uiloader:seekNodeByName(self.pageView, "page" .. tostring(p))
+		self.page:addTouchEventListener(function(ref,state)
+			if state == 1 then
+				scroll = true
+			elseif state == 3 or state == 0 or state == 2 then
+				scroll = false
+			end
+			--print("state = ",state) ---0刚触摸 1在滚动  2点击结束  3翻页完毕
+			end)
+		for i = 1, 4 do
+			for j = 1, 2 do
+				index = index + 1
+				local itemClone = self.item:clone()
+				itemClone:setPosition(cc.p(10 + (j - 1) * 268, 670 - (i - 1) * 200 - (i - 1) * 20))
+				itemClone:setName(tostring(p) .. "-" .. tostring(index))
+				self.page:addChild(itemClone)
+				self:setMessage(itemClone,p,index)
+			end
+		end
+	end
+       
