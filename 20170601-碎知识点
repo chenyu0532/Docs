@@ -1,0 +1,1 @@
+node和sprite不能被clone，只有继承了widget的控件才能clone
