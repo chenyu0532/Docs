@@ -2,3 +2,16 @@ node和sprite不能被clone，只有继承了widget的控件才能clone
 
 cocostudio2.0.6: 设置图片的触摸是否穿透，首先应该在cocostudio中选中交互性，再在代码里setSwallowTouches
       直接setSwallowTouches不好用，不知道是不是bug
+      
+decode和encode
+    decode：是把json数据转化为table类型的对象，用dump来输出会发现他的结构层次分明
+    encode：把table数据转化为json字符串
+    利用他们的性质就可以用string来存放本地数据
+    
+    local user_default = cc.UserDefault:getInstance()
+    local saved = cjson.encode(data)
+    user_default:setStringForKey("nutsHandbookRecord", saved)
+    
+    local record = user_default:getStringForKey("nutsHandbookRecord", "")
+	local data = cjson.decode(record)
+    dump(data)
