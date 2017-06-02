@@ -1,1 +1,4 @@
 node和sprite不能被clone，只有继承了widget的控件才能clone
+
+cocostudio2.0.6: 设置图片的触摸是否穿透，首先应该在cocostudio中选中交互性，再在代码里setSwallowTouches
+      直接setSwallowTouches不好用，不知道是不是bug
