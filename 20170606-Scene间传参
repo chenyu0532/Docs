@@ -33,4 +33,4 @@ B:
      local gameLayer = GameLayer:new(args)
      同时在GameLayer类内打印dump(args)
      上面的只是输出args的值
-     下面的由于默认传了self,所以
+     下面的由于默认传了self,所以会打印出GameLayer所有的函数
