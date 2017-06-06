@@ -1,0 +1,36 @@
+quick-cocos2d-lua 3.6.3
+
+1. 两个Scene A---->B
+
+A:
+    local args = {}
+	args.name = name
+    args.level = level  各种参数
+	app:enterScene("GameScene",{args})  ---enterScene传递的参数是一个table
+
+B:
+    function GameScene:ctor(args)
+        print(args)
+    end
+
+2. lua中点和冒号的区别:
+    
+    冒号定义方法，默认会接受self参数；而点号定义的时候，默认不会接受self参数
+    
+    建议：需要传递参数的时候用点，把需要的参数包括类本身都写进去
+         在定义函数的时候用冒号
+    例子:
+        function class:test()
+　　      --这里会接受self参数，比如
+　　      print(self.a,self.b) --在这里self就是class对象本身，因此不会出错
+        end
+        function class.test()
+　　      --点号定义时，默认不会接受self参数，因此在这里用self会出错，找不到全局变量self
+　　          print(self.a,self.b)--报错，找不到全局变量self
+        end
+     
+     local gameLayer = GameLayer.new(args)
+     local gameLayer = GameLayer:new(args)
+     同时在GameLayer类内打印dump(args)
+     上面的只是输出args的值
+     下面的由于默认传了self,所以
