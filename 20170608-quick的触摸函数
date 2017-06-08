@@ -1,0 +1,8 @@
+quick里触摸函数一般有addNodeEventListener和addTouchEventListener
+当用cocostudio来做界面时，给button sprite image listview等控件加触摸时用addTouchEventListener
+
+button:addTouchEventListener(function(sender,event)
+     CCLuaLog("event="..event)--event是触摸类型，0,1,2,3分别是began，moved，ended，canceled
+end ) 
+
+当不用cocostudio时用addNodeEventListener也可以,addNodeEventListener属于quick专用的触摸函数
