@@ -15,9 +15,9 @@ quick下出现setx不是内部或外部命令：
 		self.page = cc.uiloader:seekNodeByName(self.pageView, "page" .. tostring(p))
 		self.page:addTouchEventListener(function(ref,state) ---这是监听容器的翻页动作，由于里面的子数据时要可点击的，所以用scroll来管理滚动时不输出点击结果，静止时输出点击结果
 			if state == 1 then
-				scroll = true
+				
 			elseif state == 3 or state == 0 or state == 2 then
-				scroll = false
+				
 			end
 			--print("state = ",state) ---0刚触摸 1在滚动  2点击结束  3翻页完毕
 			end)
@@ -38,9 +38,9 @@ quick下出现setx不是内部或外部命令：
 	bg:setTouchEnabled(true)
 	bg:addTouchEventListener(function(sender,event) ----监听触摸效果用这个函数
 		if event == 2 then
-			if not scroll then
+			
 				print(item:getName())
-			end			
+						
 		end
 		return true
 		end)
