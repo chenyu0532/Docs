@@ -1,0 +1,6 @@
+不用cocostudio这个需求很简单
+但：
+cocostudio做的pageView经常的需求是滚动时不出发触摸，触摸时不出发滚动
+在每一个item的addTouchEventListener中，begin时计算self.posBegin = self:convertToNodeSpace(sender:getTouchBeganPosition())
+end时计算self.posEnd = self:convertToNodeSpace(sender:getTouchEndPosition())
+通过计算触摸终点与起点的差值在某范围内允许触摸的函数
