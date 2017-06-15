@@ -1,0 +1,6 @@
+quick里经常使用display.addSpriteFrames("plist","png")来把压缩的图片先加进内存去
+
+替换图片的方式
+  Sprite：用setSpriteFrame("png")  png前面没有#  #只有在newSprite的时候使用
+  Image:用loadTexture("png")这里的图片不能用frame里的，必须是实实在在的图
+  
