@@ -1,4 +1,5 @@
-	
+
+  定义private Cocos2dxGLSurfaceView glSurfaceView;
   复制即可
   public Cocos2dxGLSurfaceView onCreateView()
     {
