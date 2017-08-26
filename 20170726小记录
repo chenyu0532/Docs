@@ -1,1 +1,8 @@
+setScale与getContentSize getBoundingBox的关系
+getContentSize：是节点的原始大小，注意是原始大小，是不受图像放大与缩小的影响，返回Size
 
+getBoundingBox：获得节点当前大小，收到setScale影响，返回Rect
+又要注意一个问题:当父精灵进行缩放的时候，子精灵的显示也会收到影响，但是并不影响getBoundingBox的值，也就是说只有直接setScale才会影响，并不知道为什么
+
+getTextureRect：返回精灵纹理大小 rect类型 是原始大小，不受缩放的影响
+但是如果这个sprite用TP处理了，那么这个值返回的是实际的纹理大小，也就是去除了留白部分，在碰撞检测会用到
