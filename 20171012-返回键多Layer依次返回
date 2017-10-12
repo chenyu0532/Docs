@@ -1,0 +1,134 @@
+游戏有个需求就是如果当前操作不在主Layer，则按手机返回键时，需要依次返回上一层，当在主Layer时则提示是否退出游戏
+
+用cocos里的“back”是不行了，所以就写了一套新的，其实就是个事件系统
+
+具体用法是：在scene里监听手机返回键/esc键，scene发送事件，在这个scene中的每个layer里监听这个发送事件
+
+----------具体用法-------------------
+function MainScene:onEnter()
+	self.KeyBackDispatcher = require("app.models.KeyBackDispatcher"):getInstance()
+	--键盘事件   
+    local function onKeyReleased(keyCode, event)
+    	print("main fasong")
+       	self.KeyBackDispatcher:dispatchKeyBackEvent(true)
+    end  
+	local listener = cc.EventListenerKeyboard:create()
+	listener:registerScriptHandler(onKeyReleased, cc.Handler.EVENT_KEYBOARD_RELEASED)  
+    cc.Director:getInstance():getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, self)
+end
+
+function RoomLayer:onEnter()
+	self.KeyBackDispatcher = require("app.models.KeyBackDispatcher"):getInstance()
+	self.KeyBackDispatcher:addListener(self,handler(self,self.callback))
+end
+function RoomLayer:callback(event)
+	self:removeFromParent()
+	return true
+end
+function RoomLayer:onExit()
+    self.KeyBackDispatcher:removeListener(self)
+end
+
+----------下方是新写的事件系统---------------
+KeyBackDispatcher = class("KeyBackDispatcher")
+
+function KeyBackDispatcher:ctor()
+    self.tbListener = {}
+
+
+    self.tbNodeZorder = {}
+    self.zOrder = 0
+end
+
+function KeyBackDispatcher:getInstance()
+    if not self._instance then
+        self._instance = KeyBackDispatcher.new()
+    end
+
+    return self._instance
+end
+
+-- 在onEnter时调用
+function KeyBackDispatcher:addListener(target,callback)
+    if not target or not callback then
+        return 
+    end
+
+    local tb = {}
+    tb.target = target
+    tb.callback = callback
+
+    for i = 1,#self.tbListener do
+        if self.tbListener[i].target == target then
+            self.tbListener[i].callback = callback
+            --Log.info("KeyBackDispatcher:addListener:"..#self.tbListener)
+            return
+        end
+    end
+    table.insert(self.tbListener,tb)
+    --Log.info("KeyBackDispatcher:addListener:"..#self.tbListener)
+end
+--在onExit时调用
+function KeyBackDispatcher:removeListener(target)
+    for i = 1,#self.tbListener do
+        if self.tbListener[i].target == target then
+            table.remove(self.tbListener,i)
+            --Log.info("KeyBackDispatcher:removeListener:"..#self.tbListener)
+            return
+        end
+    end
+end
+function KeyBackDispatcher:dispatchKeyBackEvent(isPressed)
+    
+    table.getLen = function(tb)
+        local len = 0
+        for k,v in pairs(tb) do
+            len = len + 1
+        end
+        return len
+    end
+
+    self:sortEventListeners()
+    if table.getLen(self.tbListener) == table.getLen(self.tbNodeZorder) then
+        --dump(self.tbListener)
+        table.sort(self.tbListener,function(a,b)
+            local aZ = self.tbNodeZorder[a.target]
+            local bZ = self.tbNodeZorder[b.target]
+            --Log.info("aZ:"..aZ ..",bZ:"..bZ)
+            return aZ > bZ
+        end)
+        --dump(self.tbListener)
+        for i = 1,#self.tbListener do
+            if self.tbListener[i].callback and self.tbListener[i].callback(isPressed) then
+                break
+            end
+        end
+    end
+    
+    
+end
+
+function KeyBackDispatcher:sortEventListeners()
+    local rootNode = display.getRunningScene()
+    self.tbNodeZorder = {}
+    self.zOrder = 0
+    if rootNode then
+        self:visitTarget(rootNode)
+    end
+end
+
+function KeyBackDispatcher:visitTarget(node)
+    local children = node:getChildren()
+    for i = 1,#children do
+        for j = 1,#self.tbListener do
+            if self.tbListener[j].target == children[i] then
+                self.zOrder = self.zOrder + 1
+                self.tbNodeZorder[self.tbListener[j].target] =  self.zOrder
+            end
+        end
+        self:visitTarget(children[i])
+    end
+
+end
+
+return KeyBackDispatcher
