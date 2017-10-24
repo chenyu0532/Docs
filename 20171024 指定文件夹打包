@@ -1,0 +1,83 @@
+cocos compile命令指定Android项目目录
+
+cocos2d-x(3.5)创建项目，会自动添加几个平台的目录，例如
+
+proj.android
+proj.ios
+编译时执行命令：
+
+cocos compile -p android -s ./my_project -m debug
+
+编译命令指定平台为-p android的时候，只能进入proj.android目录去编译，我为了多个渠道共用大部分代码，只做少量区分，新增目录proj.android_xxx，就是没法进去编译。
+
+因为编译命令里写死了就是proj.android。想改，奈何不懂python，只好慢慢看。
+
+修改了两个py文件。
+
+下次要编译proj.android_xxx目录下的项目，执行
+
+cocos compile -p android -s xx/yy/my_project -m debug -f proj.android_xxx
+
+就可以了
+
+下面具体说一下修改的地方。我只修改了MacOS下的android平台部分。如果对于其他平台，或者其他操作系统，有需要改的，可以参考着修改。
+
+tools/cocos2d-console/bin/cocos.py
+
+CCPlugin类
+
+parse_args方法
+
+添加一个参数
+
+parser.add_argument("-f", "--folder", dest="folder", help="specify a custom android project folder")
+这样我就可以在命令里通过-f指定android项目的目录名称，而不是只能使用默认的proj.android了。
+
+传递参数
+
+self._project = cocos_project.Project(os.path.abspath(args.src_dir), args.folder)
+这个方法是创建Project对象，原本只有第一个参数，第二个是我加的（args.folder），就是指定的目录，可能为None。
+
+tools/cocos2d-console/bin/cocos_project.py
+
+Project类
+
+__init__方法
+
+def __init__(self, project_dir, specified_project_dir = None):
+    # parse the config file
+    self.info = self._parse_project_json(project_dir)
+    self.specified_project_dir = specified_project_dir
+原本只有前两个参数，我添加了第三个参数specified_project_dir，并储存起来。
+
+PlatformConfig类
+
+__init__方法
+
+def __init__(self, proj_root_path, is_script, cfg_info = None, specified_project_dir = None):
+    self._specified_project_dir = specified_project_dir
+    ...
+同样在最后添加了参数specified_project_dir，并储存起来。
+
+AndroidConfig类（是PlatformConfig的派生类）
+
+_use_default方法
+
+if self._specified_project_dir:
+    self.proj_path = os.path.join(self._proj_root_path, self._specified_project_dir)
+else:
+    self.proj_path = os.path.join(self._proj_root_path, "proj.android")
+原本只有else分支中的代码。现在用if-else区分了一下，使用指定目录，或使用默认目录。
+
+Platforms类
+
+_gen_available_platforms方法
+
+if proj_info.has_key(cfg_key):
+   if self._project.specified_project_dir:
+       cfg_obj = cfg_class(root_path, self._project._is_script_project(), proj_info[cfg_key], self._project.specified_project_dir)
+   else:
+       cfg_obj = cfg_class(root_path, self._project._is_script_project(), None, self._project.specified_project_dir)
+关于cfg_class，当指定了平台的时候，比如android，就对应到了AndroidConfig类，而它又是PlatformConfig类的派生类。
+
+这里的if-else分支是本来就存在的，我在两个分支的cfg_class的创建方法里（正是PlatformConfig类的初始化方法），加上了参数specified_project_dir，这样最开始命令指定的目录就在AndroidConfig类的_use_default方法中，成功指定了android项目的目录。
