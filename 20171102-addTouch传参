@@ -1,0 +1,8 @@
+tempBtn:addTouchEventListener(handler(self, self.setupCallback))
+有时候需要传其他的参数，怎么传呢
+
+方法 是：
+    tempBtn.extData="12345"
+    tempBtn:addTouchEventListener(handler(self, self.clickedCallback))
+    在clickedCallback里    sender.extData 即可
+
