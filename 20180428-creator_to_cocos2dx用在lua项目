@@ -1,0 +1,36 @@
+嵌入过程：ver: creator1.9.1
+
+下载creator_to_cocos2dx，并用creator打开
+
+项目->luacpp support->setup target project:
+    (1)project path：用cocos2d-x建立项目的目录
+    (2)后面的根据需求选择
+    (3)build
+
+操作正确的话会在 frameworks/runtime-src/Classes下有一个reader文件夹
+             在 res下有一个creator文件夹，里面是资源文件
+
+把下面的路径填入搜索路径中，方法是：右键项目->属性->c/c++常规->附加包含目录
+    $(ProjectDir)..\Classes\reader
+    $(ProjectDir)..\Classes\reader/collider
+    $(ProjectDir)..\Classes\reader/animation
+    $(ProjectDir)..\Classes\reader/dragonbones/cocos2dx
+    $(ProjectDir)..\Classes\reader/dragonbones/armature
+    $(ProjectDir)..\Classes\reader/dragonbones/animation
+    $(ProjectDir)..\Classes\reader/dragonbones/events
+    $(ProjectDir)..\Classes\reader/dragonbones/factories
+    $(ProjectDir)..\Classes\reader/dragonbones/core
+    $(ProjectDir)..\Classes\reader/dragonbones/geom
+
+再在工程目录下的Classes下把reader下的.h .cpp 都手动加进来
+
+Appdelegate.cpp里引入头文件#include "reader/lua-bindings/creator_reader_bindings.hpp"
+  加入register_creator_reader_module(L); //官网教程这里好像写错了
+
+编译
+
+ex:在lua中调用：
+  	local creatorReader = creator.CreatorReader:createWithFilename("helloworld.ccreator")
+	  creatorReader:setup()
+	  local scene = creatorReader:getSceneGraph()
+	  cc.Director:getInstance():replaceScene(scene)
