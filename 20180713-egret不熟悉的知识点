@@ -1,0 +1,9 @@
+1.  monster = Utils.createBitmapByName("putong_png");
+    monster.name = "monster1";
+	 monster.requireTime = 13000; //可以给生成的对象自己赋属性
+   monster.addEventListener(egret.Event.ENTER_FRAME,this.onFrame,this); //之后可以通过addEventListener来进行传递
+   private onFrame(event:egret.Event)
+	{
+	   	let ta = event.target;
+	  	console.log(event.target.requireTime)  //13000
+    }
