@@ -7,3 +7,8 @@
 	   	let ta = event.target;
 	  	console.log(event.target.requireTime)  //13000
     }
+2. 初始化数组的时候，最好不要直接赋值，利用new来初始化
+3. 把一些数据赋值给某些变量的时候，要利用深/浅拷贝的方法(可以查询深拷贝 浅拷贝)
+4. 要对某个运动的物体中途改变速度时，不要用loop:true，尽量用回调的方式进行无限运动
+5. 取另一个皮肤的某一属性，方法只有.和[""]两种
+6. 用localToGlobal或者GlobalToLocal时，最号不要用this.localToGlobal，用xxx.parent.localToGlobal
