@@ -13,3 +13,4 @@
 5. 取另一个皮肤的某一属性，方法只有.和[""]两种
 6. 用localToGlobal或者GlobalToLocal时，最号不要用this.localToGlobal，用xxx.parent.localToGlobal
 7. 当要加的第三方模块没有js或.min.js时，要在egret.Properties里的路径写完整，比如"path": "./libms/BattlePlatform/BattlePlatform.js"
+	 	
