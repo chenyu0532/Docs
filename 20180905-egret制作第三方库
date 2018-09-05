@@ -1,0 +1,45 @@
+egret version:5.2.8
+
+第一种情况：只有一个js文件(比如我接的oppo，只有一个BattlePlatform.js)
+    在任意位置右键命令行运行 egret create_lib demo   (demo只是个名字，随意起)，
+    这时候就会生成一个demo文件夹，里面有package.json和tsconfig.json，同时新建bin src typings三个文件夹
+    将js文件放到src目录下，将对应的 .d.ts 文件放到typings目录下。(如果没有.d.ts文件的话，也可以自己写一个，非常简单)，
+    修改package.json和tsconfig.json
+    最终如下：
+        package.json:
+            {
+                "name": "BattlePlatform",
+                "compilerVersion": "5.2.8",
+                "typings": "typings/BattlePlatform.d.ts"
+            }
+        tsconfig.json:
+            {
+                "compilerOptions": {
+                    "target": "es5",
+                    "noImplicitAny": false,
+                    "sourceMap": false,
+                    "declaration": false, // 是否生成.d.ts文件。 如果是typescript库设置为true，如果是javascript库设置为false
+                    "outFile": "bin/BattlePlatform.js",// 生成的库文件的路径
+                    "allowJs": true  // 是否允许编译js文件。 如果是typescript库设置为false，如果是javascript库设置为true
+                },
+                "include": [
+                    "src"
+                ]
+            }
+    再在命令行里运行egret build，没问题的话，就会在bin下生成 js .min.js .d.ts三个文件，接下来的使用跟其他标准库的使用就是一样的了
+    要验证是否可以使用，那么就要在发布出来bin-release/js里看看有没有BattlePlform的文件，有的话则说明正确，没有则错误
+
+第二种情况：只有一个.min.js，是个http形式的 (比如小米平台的，这个平台不能再模拟器上调试)
+    首先在egretProperties.json里增加字段
+        {
+			"name": "xiaomi",
+			"path": "./libms/xiaomi/xiaomi.min.js"  //这里要具体指明文件
+		}
+    其次：在tsconfig.json里的include里增加"libms/xiaomi"
+    再其次：template/web/index.html里增加：
+    </script>
+        <script type="text/javascript"  src="http://xxxxx/h5sdk-v.1.0.min.js"></script>
+    </body>
+
+    
+    
