@@ -1,0 +1,6 @@
+获取手机物理宽高：
+  egret.Capabilities.boundingClientWidth
+  egret.Capabilities.boundingClientHeight
+
+获取dpr
+  window.devicePixelRatio
