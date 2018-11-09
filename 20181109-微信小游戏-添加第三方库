@@ -1,0 +1,8 @@
+按照之前的文档集成商第三方库之后，要在微信小游戏中应用需要在下面的地方添加
+scripts->wxgame->wxgame.ts中
+大概在30行左右，复制一下上面的if语句
+例如：
+    if (filename == 'libms/md5/md5.js' || filename == 'libms/md5/md5.min.js') {
+         content += ';window.md5 = md5';
+    }
+再publish一下
