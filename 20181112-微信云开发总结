@@ -1,0 +1,66 @@
+1. 云开发中的 "云函数" 只要不是太复杂的需求基本用不上
+2. 每个项目的云存储可以有两个子项目，可以命名为..debug 和 ...release ，方便区分测试和发布版本
+3. 初始化数据库的时候，最好是把数据库中_id设置成openid，可以很方便的区分不同的用户，比如
+  ```
+     initDatabase(openid){
+        let self = this;
+        self.openId = openid;
+        
+        let db = wx.cloud.database("数据库id");
+        return new Promise((resolve, reject) => {
+            db.collection("datacollection").where({
+                _id:self.openId
+            })
+            .get({
+                success: function(res) {
+                    // res.data 包含该记录的数据
+                    if(res.data.length === 0){
+                        db.collection("datacollection").add({
+                            data:{
+                                _id:self.openId,//吧_id设置为openid，这里不要再设置_openid了,系统会自动添加的
+                                coinCnt:0,   //金币
+                                maxScore:0,   //最高分
+                                reliveCard:0,  //复活卡
+                                useSkin:1,    //默认使用的皮肤
+                                signday:[],   //签到天数
+                                shopdata:[     //商城
+                                    {buy:true,  use:true},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                    {buy:false, use:false},
+                                ]
+                            },
+                            success:function(res){
+                                db.collection("datacollection").where({
+                                    _id:self.openId
+                                }).get({
+                                    success: function(res){
+                                        resolve(res);
+                                    },
+                                    fail:function(res){
+                                    }
+                                })
+                            },
+                            fail:function(res){
+                                console.log("again get-->", res);
+                            }
+
+                        })
+                    } else {
+                        resolve(res);
+                    }
+                }
+            })
+        });
+    }
+  ```
+ 4. set方法的作用是：把原来的数据库里的所有字段替换为代码里的字段，如果原数据库里没有某字段，添加的数据里有，则会新增字段
+     如果原数据库里有某字段，但是传递的数据里没有这个字段，那么将会删除原数据库的这个字段
+     set一般不常用，大部分的需求用update就可以了。
+ 5. update方法里如果不用db.command里的功能，设置的值一样的时候，会输出 更新成功，但是数值不变(其实这个不用记)
+ 
