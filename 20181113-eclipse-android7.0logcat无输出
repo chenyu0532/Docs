@@ -1,0 +1,4 @@
+1. 下载QQ邮箱里的ddmlib.jar
+2. 将下载好的ddmlib.jar替换到自己ADT的tools目录lib下xx:\xxx\sdk\tools\lib
+3. 将下载好的ddmlib.jar替换到自己ADT的configuration目录org.eclipse.osgi下xx:\xxx\eclipse\configuration\org.eclipse.osgi\bundles\5\1\.cp\libs
+4. 重启eclipse
