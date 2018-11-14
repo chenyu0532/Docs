@@ -41,5 +41,10 @@ egret version:5.2.8
         <script type="text/javascript"  src="http://xxxxx/h5sdk-v.1.0.min.js"></script>
     </body>
 
+第三种情况：在接oppo快游戏的时候，按照文档一步一步的操作，到调用api的时候，
+		如果是调用的变量，则应该是用window["变量"].func()，
+		如果调用的是函数，则应该是window["函数名"]()
+		
+		
     
     
