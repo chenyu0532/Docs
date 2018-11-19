@@ -1,0 +1,13 @@
+下载android studio ,我下的是3.1版本
+如果现在直接用creator打包的话，会出现下载不了gradle-4.1-all类似的错误，现在可以手动下载这个文件，然后解压拷贝到
+    C:\Users\Administrator\.gradle\wrapper\dists下。
+
+打开android studio，当更新gradle的插件时，又会出现无法连接或者无法获取Maven 3.0.0等数据错误，现在可以在
+    build.gradle文件里的repositories 和 allprojects 加上 maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    然后在Setting-->Build Execytion Deployment-->Gradle--->Android studio里选中Disable embedded Maven repository即可
+    这样就不用用镜像了
+    估计是网络的原因(我明明已经翻墙了，还出现这个错误)。
+
+等待都更新完毕，就可以用creator发包了。
+
+PS:这只是我遇到的坑，可能跟别人遇到的不一样，多google吧
