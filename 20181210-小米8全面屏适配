@@ -1,0 +1,10 @@
+在用creator2.0.5 发布android app的时候，如果按Height来适配的话，最上面的耳朵区会有黑边
+<meta-data android:name="android.max_aspect"  android:value="2.2" />
+        <meta-data
+             android:name="notch.config"
+             android:value="portrait"/>
+
+第一个meta的设置，是Google对于全面屏的要求，ratio_float = 2.2(屏幕高 / 屏幕宽),
+已知这个值的最高值为2.11，所以这里设置成了2.2
+
+第二个meta是小米8 8SE这些刘海全面屏的设置
