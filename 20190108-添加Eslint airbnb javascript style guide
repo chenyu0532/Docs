@@ -1,0 +1,27 @@
+为Vscode 添加 airbnb javascript style guide
+1. 在Vscode的插件系统里安装Eslint，重启Vscode
+2. 安装npm套件：npm install -g eslint
+3. 输入eslint --init
+4. 选择主流的Use a popular style guide
+5. 可能会提示你npm init，回车到底即可
+6. 重新eslint --init后，出现
+    Google
+    Airbnb：我选这个，如果选此选项，会多问一个：是否使用 React，我选否
+    Standard
+7. 选择json格式，看个人喜好了
+8. 重启vscode
+
+重点是在第7步生成的json文件里怎么去配置：
+    "extends": "airbnb-base",
+    "globals": {    //这一行是设置全局变量，由于creator里的cc.  window.都是全局的，直接设置不检查他们
+        "cc":false,
+        "window":false
+    },
+    "rules": {
+        "linebreak-style":0,   //关闭行尾 ，默认区分了windows unix
+        "indent": [1, 4, {"SwitchCase": 1}],  //空格，这里设置的是1个tab(4空格)，并且switch里是特殊需求
+        "spaced-comment":["error", "always"],  //注释 // 后面要加一个空格
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }], // ++ --
+        "prefer-template": "error",
+        "no-underscore-dangle": ["error", { "allowAfterThis": true }] //是否允许用 _变量
+    }
