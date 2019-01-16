@@ -13,15 +13,26 @@
 
 重点是在第7步生成的json文件里怎么去配置：
     "extends": "airbnb-base",
-    "globals": {    //这一行是设置全局变量，由于creator里的cc.  window.都是全局的，直接设置不检查他们
+    "globals": {
         "cc":false,
-        "window":false
+        "window":false,
+        "G":false,
+        "dragonBones":false,
+        "Notification":false
     },
     "rules": {
-        "linebreak-style":0,   //关闭行尾 ，默认区分了windows unix
-        "indent": [1, 4, {"SwitchCase": 1}],  //空格，这里设置的是1个tab(4空格)，并且switch里是特殊需求
-        "spaced-comment":["error", "always"],  //注释 // 后面要加一个空格
-        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }], // ++ --
+        "linebreak-style":0,
+        "indent": [1, 4, {"SwitchCase": 1}],
+        "spaced-comment":["error", "always"],
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
         "prefer-template": "error",
-        "no-underscore-dangle": ["error", { "allowAfterThis": true }] //是否允许用 _变量
+        "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+        "no-unused-vars": "off",
+        "no-empty": "off",
+        "no-console": "off",
+        "radix": 0,
+        "no-restricted-syntax": 0,
+        "func-names": ["error", "never"],
+        "prefer-arrow-callback": "off",
+        "max-len":"off"
     }
