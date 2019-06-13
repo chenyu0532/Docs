@@ -1,0 +1,4 @@
+cocoscreator:帧动画停留在某一帧上：
+    anim.play(null, 帧数);
+    anim.sample();
+    anim.stop();
