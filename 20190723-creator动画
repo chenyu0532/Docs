@@ -1,0 +1,5 @@
+使帧动画停在某一帧：
+  const nanAnim = this.nan.getComponent(cc.Animation);
+  nanAnim.play(null, 1);
+  nanAnim.sample();
+  nanAnim.stop();
