@@ -1,0 +1,11 @@
+
+1.
+  let check_node_collider = check_node.getComponent(cc.PolygonCollider);
+  这里check_node_collider的point属性获取的是局部坐标，在使用cc.Intersection.pointInPolygon做判断时，最好统一采用世界坐标
+  check_node_collider.world.points，避免不必要的麻烦
+2.
+  当摄像机移动后，鼠标点击的位置，是摄像机下的坐标; 
+  摄像机坐标转世界坐标:
+　　camera.getCameraToWorldPoint(point, out);
+  世界坐标转摄像机坐标:
+　　camera.getWorldToCameraPoint(point, out);
