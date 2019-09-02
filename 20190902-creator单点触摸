@@ -1,0 +1,14 @@
+resources\engine\cocos2d\core\platform\CCInputManager.js 里面的 _maxTouches 修改为1即为单点触摸
+
+android:
+  Cocos2dxGLSurfaceView.java类里，public boolean onTouchEvent(final MotionEvent event)函数里，
+  switch (event.getAction() & MotionEvent.ACTION_MASK) {
+        case MotionEvent.ACTION_POINTER_DOWN:
+            if (pointerNumber > 1) return false;
+...
+        case MotionEvent.ACTION_DOWN:
+            if (pointerNumber > 1) return false;
+... 即可
+
+ios:
+  didFinishLaunchingWithOptions函数里 设置 ：[eaglView setMultipleTouchEnabled:NO]
