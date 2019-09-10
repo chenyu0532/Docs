@@ -1,0 +1,5 @@
+pageview分为3个层次  scrollview--->view--->content--->具体的内容
+
+竖屏：个人习惯于view--->content的Y锚点，设置为1
+    view的height要根据屏幕的大小来适配  this.view.height = cc.winSize.height
+    content大小是所有元素的大小就可以了
