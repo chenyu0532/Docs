@@ -1,1 +1,200 @@
+1. labelatlas：艺术字体，需要美术出图的时候出一张，并且对字间距 字大小都设定好
 
+2. 按钮的transition状态：cc.Button.Transition.COLOR cc.Button.Transition.SPRITE 等
+
+3. mask组件：ELLIPSE是椭圆/圆
+   mask嵌套
+
+4. 物体实时跟随手指运动：
+    onLoad: function () {
+        var self = this;
+        self.moveToPos = cc.v2(0, 0);
+        self.isMoving = false;
+        self.canvas.on(cc.Node.EventType.TOUCH_START, function (event) {
+            var touches = event.getTouches();
+            var touchLoc = touches[0].getLocation();
+            self.isMoving = true;
+            self.moveToPos = self.follower.parent.convertToNodeSpaceAR(touchLoc);
+        }, self.node);
+        self.canvas.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
+            var touches = event.getTouches();
+            var touchLoc = touches[0].getLocation();
+            self.moveToPos = self.follower.parent.convertToNodeSpaceAR(touchLoc);
+        }, self.node);
+        self.canvas.on(cc.Node.EventType.TOUCH_END, function (event) {
+            self.isMoving = false; // when touch ended, stop moving
+        }, self.node);
+    },
+
+    // called every frame
+    update: function (dt) {
+        if (!this.isMoving) return;
+        var oldPos = this.follower.position;
+        // get move direction
+        var direction = this.moveToPos.sub(oldPos).normalize();
+        // multiply direction with distance to get new position
+        var newPos = oldPos.add(direction.mul(this.followSpeed * dt));
+        // set new position
+        this.follower.setPosition(newPos);
+    }
+
+5. UI坐标系：原点在左上角 android ios都是使用的这个坐标系
+    openGL坐标系(cocos的渲染用的openGL渲染，所以用的就是这种坐标系)：原点在左下角.
+	分为世界坐标和模型坐标
+
+    getLocation()：获取的是触摸点到左下角原点的距离，如果想获取相对于谁的坐标，只需要
+            谁.convertToNodeSpaceAR(getLocation())
+               附：父节点.convertToWorldSpaceAR(子节点)
+    getLocationInView()：获取的是触摸点到左上角原点的距离
+
+6. 炮台随怪物旋转：
+       update: function (dt) {
+          //得到怪物的坐标
+          var sp = this.guaiwu.convertToWorldSpaceAR(this.guaiwu.getPosition())
+          //得到炮塔的坐标
+          var pos  = this.node.convertToWorldSpaceAR(this.node.getPosition())
+          cc.log(pos,sp)
+          //计算怪物与炮塔的坐标差
+          var truePos=cc.p(sp.x-pos.x,sp.y-pos.y)
+          //将他们的坐标差转换为弧度
+          var angle=cc.pAngleSigned(truePos,cc.p(0,1));
+          //将他们的弧度转换为角度
+          var angledegrees=cc.radiansToDegrees(angle);
+          //让炮塔每一帧都往怪物的坐标进行角度变换
+          this.node.runAction(cc.rotateTo(dt,angledegrees))
+           var po1 = this.paota.getPosition()
+
+           if(0){
+                //局部坐标转换
+                var po2 = this.canvas.convertToNodeSpaceAR(touch.getLocation())
+                cc.log(po1.x,po1.y,'  | ',po2.x, po2.y)
+            }else{
+                //全局坐标转换
+                po1 = this.bg.convertToWorldSpaceAR(po1)
+                po1 = cc.pSub(touch.getLocation(), po1)
+            }
+            var at = cc.radiansToDegrees(cc.pAngleSigned(po1, cc.p(0,1)))
+            this.hand.rotation = at 
+
+7. lastframe : 假如动画循环次数大于 1，当动画播放到最后一帧时
+
+8. 动态加载动画：
+       cc.loader.loadRes("test_assets/atlas", cc.SpriteAtlas, (err, atlas) => {
+            var spriteFrames = atlas.getSpriteFrames();
+            var clip = cc.AnimationClip.createWithSpriteFrames(spriteFrames, 10);
+            clip.name = 'run';
+            clip.wrapMode = cc.WrapMode.Loop;
+            animation.addClip(clip);
+            animation.play('run');
+        });
+
+9. 平台上最多可以同时播放多少个音频：
+        cc.audioEngine.getMaxAudioInstance()
+
+10. 序列化：解析内存中的对象，将它的信息编码为一个特殊的字符串，以便保存到硬盘上或传输到其它地方。
+
+11. 跨类调用的另一种方法：
+    //被调用
+    cc.Class({
+        extends: cc.Component,
+
+        properties: {
+            power: 10
+        },
+
+        getPower: function() {
+            return this.power;
+        }
+    });
+    // 调用类
+    const MyCustomComponent = require('MyCustomComponent');
+    cc.Class({
+        extends: cc.Component,
+        properties: {
+            myComponent: {
+                default: null,
+                type: MyCustomComponent
+            },
+         },
+        onLoad: function () {
+            this.myLabel.string = this.myComponent.getPower().toString();
+        },
+    })
+
+12. // 定义数组和颜色面板
+    myOtherVec2: cc.Vec2.ONE,
+    myOtherColor: cc.Color.WHITE
+
+13. cc.js.getClassName 来获得类名
+    cc.js.getClassByName 来查找对应的类
+
+14. Node可以触发的不常用的事件：
+	cc.Node.EventType.POSITION_CHANGED       当位置属性修改时
+	cc.Node.EventType.ROTATION_CHANGED      当旋转属性修改时
+	cc.Node.EventType.SCALE_CHANGED 	当缩放属性修改时
+	cc.Node.EventType.SIZE_CHANGED	当宽高属性修改时
+	cc.Node.EventType.ANCHOR_CHANGED 	当锚点属性修改时
+	cc.Node.EventType.COLOR_CHANGED    当颜色改变时
+	cc.Node.EventType.CHILD_ADDED          当添加子节点时
+	cc.Node.EventType.CHILD_REMOVED     当删除子节点时
+	cc.Node.EventType.CHILD_REORDER      当节点顺序改变时
+	cc.Node.EventType.GROUP_CHANGED   当节点所属群组改变时
+
+15. setSiblingIndex：设置节点同级索引，默认的是在场景树的那个顺序
+    zIndex：渲染层次，所有节点默认的zIndex都是0，在相同的zindex下，按siblingIndex的排序来渲染
+    例如：每次点击让当前选中的节点处于最上方的效果：
+        this.max_index = 10;          
+        this.node.setSiblingIndex(this.max_index);
+        this.max_index++;
+
+16. 前后台切换：cc.game.EVENT_HIDE  cc.game.EVENT_SHOW
+
+17. (重点)交叉引用：
+    properties: () => ({
+        refToBar: require('Bar')
+    }),
+    properties: () => ({
+        refToFoo: require('Foo')
+    }),
+    这种情况就不能使用普通的声明，可以使用箭头函数，因为箭头函数的内容在脚本加载过程中并不会同步执行而是会被 CCClass 以异步的形式在所有脚本加载成功后       才调用。因此加载过程中并不会出现循环引用，属性都可以正常初始化。
+
+18. event.target.name既可以自己设置，又可以是节点的名称，或者还有别的。。。。
+
+19. 加载模块：
+        var monster = cc.instantiate(this.monsterTemp);
+        var Monster = require("Monster");
+        var monsterComp = monster.getComponent(Monster);
+        var InitData = require("InitData");
+        monsterComp.initInfo(InitData.monsterInfo);
+        monster.parent = this.node;
+        monster.setPosition(cc.v2(0, 0));
+
+20. js statics：
+        statics: {
+            instance: null
+        },
+    赋值之后，值一直保持着，不会变，除非手动改变。调用的时候只能是：类名.instance
+    //Singleton
+    var Singleton = cc.Class({
+        extends: cc.Component,
+        properties: {
+            monsterIcon: cc.SpriteFrame
+        },
+        statics: {
+            instance: null
+        },
+        onLoad: function () {
+            Singleton.instance = this;
+        }
+    });
+    //另一个
+    var Singleton = require("Singleton");
+    sprite.spriteFrame = Singleton.instance.monsterIcon;
+
+    //progress更平滑一些
+     if (progress < this.progress) {
+                progress += dt;
+            }
+    this.progressBar.progress = progress;
+
+21. //节点池
