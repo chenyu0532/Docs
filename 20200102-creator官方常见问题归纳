@@ -1,0 +1,170 @@
+1. event.getTouches().length;
+   这个字段来检测触点数量
+
+2. 多点触控监听，假设 AB 两点，按住 B 点，重复多次点击 A 点之后，抬起 B 点时不响应 ‘touchend’ 事件：因为在引擎内部有个触摸超时检测，
+    默认是5000ms，TOUCH_TIMEOUT: 5000,  修改下即可，一般捕鱼或音乐游戏需要
+
+3. this.unschedule(callback, target)是需要两个参数来指定需要暂停的定时器对象。
+   callBack 必须是与this.schedule中的回调一样，匿名函数不行。
+
+4. 挂载Animation组件的节点使用nodePool
+   回收到节点池时会移除节点注册的action动作，但是对于动画只会暂停而不会消除。
+    所以你需要自己在播放的时候处理一下每次都从头开始重新播放。
+
+5. 刚体掉落在 PhysicsBoxCollider 物体上会一直小浮动的抖动：
+box2d弹力问题：
+弹力属于特殊运动，物理系统在游戏生命周期内会不断计算刚体的状态和位置。目前可以通过降低物理系统的update回调传递的dt参数的精度来优化这个问题。
+找到box2d.js中的这段代码，然后改一下数值
+b2Island.prototype.Slove = funciotn 修改 h = Math.floor(step.dt * 100) / 100
+还有另外一种方案是开启一个计时器，判断多次回弹时每次幅度是否小于某个值（比如dt），然后再手动停止这个物体的弹跳。
+
+6. 在加载远程资源的时候，我们需要手动在函数中首先配置一下加载到的资源的_uuid
+例如
+cc.loader.load("http://192.168.55.23:8000/naruto.jpg", (err,resTexture)=> {
+    if (!err) {
+        resTexture._uuid = "http://192.168.55.23:8000/naruto.jpg";
+        ...
+    }
+});
+配置完之后，如果你想释放这个资源可以调用。
+cc.loader.release(resTexture);
+
+7. Widget组件改变的坐标值当前帧不刷新：widget.updateAlignment();
+
+8. 开放数据域的 Image 只能使用本地或微信 CDN 的图片，不能使用开发者自己服务器上的图片。对于非本地或非微信 CDN 的图片，可以先从主域 wx.downloadFile() 下载图片文件，再通过 OpenDataContext.postMessage() 把文件路径传给开放数据域去使用。
+
+9. v2.1.0 eulerAngles替换rotationY的用法 ：eulerAngles 参数类型为 Vec3 ，node.eulerAngles = cc.v3(x, y, z);
+
+10. Label 下一帧才刷新大小 怎么办 ：可以自行在设置 label 所有属性后在执行一次 label._updateRenderData(true); 就能带当帧获取大小。
+
+11. 龙骨有黑边：点击龙骨图片选择Premultiply；点击龙骨节点，修改渲染模式为ONE ONE_MINUS_SRC_ALPHA
+
+12. 如果只是想让动画跳到某一帧但是不想播放，可以这样使用。
+        var state = this.anima.getAnimationState("test");
+        var curves = state.curves;
+        var info = state.getWrappedInfo(0.3);
+        for (var i = 0, len = curves.length; i < len; i++) {
+            var curve = curves[i];
+            curve.sample(info.time, info.ratio, this);
+        }
+    恢复播放就用上面的play方法。
+    恢复到初始状态的话你传入0.01差不多就够用了。
+
+13. CocosCreator调试预览的时候，如何设置不显示引擎信息 ：cc.debug.setDisplayStats(false);
+
+14. Creator2.0.5 当字体文件过大，比如大于10M时，场景或Prefab会加载不出来
+     修改engine中的font-loader.js中的_timeout为一个较短的时间 例如 10000
+
+15. cc.loader.loadResDir 的异常，它的加载是异步加载无法保证所加载的item顺序
+     使用loadRes
+
+16. // 自定义数据
+       nameColor: {
+            default: "",
+            type: cc.String,
+        },
+        fromValue: {
+            default: 0,
+            type: cc.Float,
+        },
+        setColor: {
+            default: cc.Color.WHITE,
+            type: cc.Color,
+        }
+
+17. //回调参数传参
+    cc.callFun(function(data){
+        this.xxx = data.name;
+    }, this, {name:'a',age:18})
+
+18.         //
+        var name    = "ddc";
+        // 获取组件对象
+        var _armatureDisplay = this.getComponent(dragonBones.ArmatureDisplay);
+        // 设置显示的骨架名称（其实已经在属性检查器面板上选择过了，这一步可省略）
+        _armatureDisplay.armatureName = name;
+        
+        // ddc_luntai2  ddc_luntai1
+        // 获取骨头对象（车子的后轮）
+        this.ddc_luntai2 = _armatureDisplay.armature().getBone("ddc_luntai2");
+        
+        // 定义一个初始角度值
+        this.angle = 1;
+    },
+ 
+    // called every frame, uncomment this function to activate update callback
+    update: function (dt) {
+        // 角度值每次updata增加1
+        this.angle = this.angle + 1;
+        
+        if (CC_JSB)
+        {
+            // 在JSB环境下，设置骨头的角度，实现旋转
+            this.ddc_luntai2.offset.setRotation(this.angle * Math.PI/180);
+        }
+        else
+        {
+            // 在WEB环境下，设置骨头的角度，实现旋转
+            this.ddc_luntai2.offset.rotation = this.angle * Math.PI/180;
+        }
+        
+        // 获取组件，实现动画刷新显示
+        this.getComponent(dragonBones.ArmatureDisplay).armature().invalidUpdate();
+    },
+
+
+19. cullingMask属性决定这个摄像机用来渲染场景的哪些部分，比如玩家在移动的时候，“第一关 幸存者9/9”这些是一直在屏幕中央的，就需要分组管理来。
+    在菜单栏->项目->项目设置里添加分组，一个不需要随着摄像机移动的UI分组。
+    然后再添加一个UI摄像机，Depth设置的大一些，显示在最上面，并且 cullingMask 只勾Game UI 分组。
+    clearFlags一般除了最底层的摄像机里需要全部打勾，其他摄像机就不需要勾选了，不然上层摄像机会把下层的画面清除。
+
+20. TypeError: children[i]._onBatchCreated is not a function
+     因为场景json文件中某个节点出现了_children里有了null导致打不开场景,删除null即可
+
+21. labelOutline组件可以实现描边 , 但是如何设置描边在X,Y轴上的偏移量呢
+     cocos-creator/engine/blob/v2.0.8-release/cocos2d/core/renderer/utils/label/ttf.js#L262
+    for (let i = 0; i < _splitedStrings.length; ++i) {
+    if (_isOutlined) {
+        let strokeColor = _outlineColor || WHITE;
+        _context.strokeStyle = `rgba(${strokeColor.r}, ${strokeColor.g}, ${strokeColor.b}, ${strokeColor.a / 255})`;
+        _context.lineWidth = _outlineWidth * 2;
+        _context.strokeText(_splitedStrings[i], startPosition.x, startPosition.y + i * lineHeight);
+    }
+    _context.fillText(_splitedStrings[i], startPosition.x, startPosition.y + i * lineHeight);
+   startPosition是描边的位置，可以通过控制这个值来让描边产生偏移。需要自己定制引擎。
+
+*22. 2.0.x只支持加载binary，但识别为cc.Asset类型，只有在2.1以上编辑器才会将binary识别为BufferAsset
+
+23 CocosCreator 2.2.0 版本之后，让精灵制灰应该：
+    let grayMaterial = cc.Material.getBuiltinMaterial('2d-gray-sprite');
+    cc.find("Canvas/cocos").getComponent(cc.Sprite).setMaterial(0, grayMaterial);
+ 
+24. 原生 Spine骨骼换肤，setSkin后，执行 setToSetupPose(); 才会更新
+    
+    
+    
+    
+    
+    
+    
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    
