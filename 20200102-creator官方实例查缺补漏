@@ -198,3 +198,10 @@
     this.progressBar.progress = progress;
 
 21. //节点池
+
+22. 不规则按钮区域的点击：
+	cc.director.getCollisionManager().enabled = true;
+	let touchLoc = touch.getLocation();
+	if (cc.Intersection.pointInPolygon(touchLoc, this.collider.world.points)) {
+		console.log("点中")
+	}
