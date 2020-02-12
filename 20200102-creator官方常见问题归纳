@@ -140,6 +140,11 @@ cc.loader.release(resTexture);
     cc.find("Canvas/cocos").getComponent(cc.Sprite).setMaterial(0, grayMaterial);
  
 24. 原生 Spine骨骼换肤，setSkin后，执行 setToSetupPose(); 才会更新
+
+25. 去除 videoplayer 的进度条: videoPlayer.ios.mm-->initPlayerController-->[self showPlaybackControls:NO];
+
+26. 帧动画拉伸(一个连线效果，资源是帧动画，长度只有10*10，如果2个连线的点距离过长，如何把10*10的帧动画变成距离所需的长度。例如变成10*100.)
+   修改cc.AnimationClip.curveData4
     
     
     
