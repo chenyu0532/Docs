@@ -1,0 +1,14 @@
+1. 
+    //弧度转为度
+
+    function radToDegree（rad）{
+
+        return rad * 180 / Math.PI;
+
+    }
+    // 度转为弧度
+    function degreeToRad（degree）{
+
+    return（度/ 180）* Math.PI;
+
+}
