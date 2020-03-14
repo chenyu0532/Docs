@@ -28,7 +28,8 @@
         if (alermOn == true)
         {
             _light.intensity = Mathf.Lerp(_light.intensity, targetIntensity, Time.deltaTime * intensitySpeed);
-            if ((Mathf.Abs(_light.intensity - targetIntensity)) <= 0.05f)//因为线性插值使得fromintensity永远不会与tointensity相等，并且到后来每次变化的值也会减小
+            if ((Mathf.Abs(_light.intensity - targetIntensity)) <= 0.05f)//因为线性插值使得fromintensity永远不会与tointensity相等，并且到后来每次变化的    
+                 值也会减小
             {//如果达到了这种地步将起始的两个值对调，使灯光渐渐变暗，达到自然的情况
                 if (targetIntensity == heighIntensity)
                 {//当目标数值为高数值时，需要将它换成低数值
@@ -42,4 +43,6 @@
             }
         }
     }
+
+    https://blog.csdn.net/kuokuo666/article/details/95728409
 
