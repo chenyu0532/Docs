@@ -1,14 +1,45 @@
 1. 
     //弧度转为度
+      cc.misc.radiansToDegrees(rad);
+    // 角度转为弧度
+     cc.misc.degreesToRadians(deg);
 
-    function radToDegree（rad）{
+     clampf ：限定浮点数的最大最小值。
+               数值大于 max_inclusive 则返回 max_inclusive。
+               数值小于 min_inclusive 则返回 min_inclusive。
+               否则返回自身。
+               var v1 = cc.misc.clampf(20, 0, 20); // 20;
+               var v2 = cc.misc.clampf(-1, 0, 20); //  0;
+               var v3 = cc.misc.clampf(10, 0, 20); // 10;
+               
+     clamp01：限定浮点数的取值范围为 0 ~ 1 之间。
+              var v1 = cc.misc.clamp01(20);  // 1;
+              var v2 = cc.misc.clamp01(-1);  // 0;
+              var v3 = cc.misc.clamp01(0.5); // 0.5;
+     
+     插值：在from与to之间根据t值比例乘以两者之间的差再加到from上，依次地逼近to的值，但是永远不可能达到to值；
+      let from = 200;
+      let to = 220;
+      let t = 0.5;
+      let n = cc.misc.lerp(from, to, t);
+      例子：警报灯闪烁
+      void Update () {
 
-        return rad * 180 / Math.PI;
+        if (alermOn == true)
+        {
+            _light.intensity = Mathf.Lerp(_light.intensity, targetIntensity, Time.deltaTime * intensitySpeed);
+            if ((Mathf.Abs(_light.intensity - targetIntensity)) <= 0.05f)//因为线性插值使得fromintensity永远不会与tointensity相等，并且到后来每次变化的值也会减小
+            {//如果达到了这种地步将起始的两个值对调，使灯光渐渐变暗，达到自然的情况
+                if (targetIntensity == heighIntensity)
+                {//当目标数值为高数值时，需要将它换成低数值
+                    targetIntensity = lowIntensity;
 
+                }
+                else if (targetIntensity == lowIntensity)//当目标数值是低数值时，将它换成高数值，如此可实现由高到低由低到高的渐变过程
+                {
+                    targetIntensity = heighIntensity;
+                }
+            }
+        }
     }
-    // 度转为弧度
-    function degreeToRad（degree）{
 
-    return（度/ 180）* Math.PI;
-
-}
