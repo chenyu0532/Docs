@@ -44,5 +44,15 @@
         }
     }
 
-    https://blog.csdn.net/kuokuo666/article/details/95728409
+2.  当在做打飞机等类型的游戏时，因为需要控制飞机的四周最大最小坐标
+    可以定义几个变量：minXminY: cc.v2(xxxx,yyyy)
+                    maxXmaxY: cc.v2(ccc,ddd)
+    想定义成下拉框的选择类型时，需要用到枚举
+        let LimitType = cc.Enum({
+            // 数字模式
+            Number: 0,
+            // 节点模式
+            Node: 1,
+        });
+        limitType:LimitType
 
