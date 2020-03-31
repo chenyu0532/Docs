@@ -34,7 +34,6 @@
                 if (targetIntensity == heighIntensity)
                 {//当目标数值为高数值时，需要将它换成低数值
                     targetIntensity = lowIntensity;
-
                 }
                 else if (targetIntensity == lowIntensity)//当目标数值是低数值时，将它换成高数值，如此可实现由高到低由低到高的渐变过程
                 {
@@ -42,7 +41,9 @@
                 }
             }
         }
-    }
+      }
+
+      //TODO 物体运动  中断  转向
 
 2.  当在做打飞机等类型的游戏时，因为需要控制飞机的四周最大最小坐标
     可以定义几个变量：minXminY: cc.v2(xxxx,yyyy)
@@ -55,4 +56,19 @@
             Node: 1,
         });
         limitType:LimitType
+
+3.  物体的头部左右转运动
+	let hudu = cc.misc.degreesToRadians(this.role.rotation);
+	this.role.x += this.speed * Math.sin(hudu);//////sin cos等这些参数是弧度...
+	this.role.y += this.speed * Math.cos(hudu);
+
+4. 各种坐标转换
+
+	屏幕坐标系：左上角为原点
+	cocos2d-x和openGL坐标系：左下角为原点
+	世界坐标系/绝对坐标系：左下角为原点
+	
+  //后面传的坐标，是相对于你这个节点的父节点下的坐标
+	A.parent.convertToWorldSpaceAR(A.position); // A的坐标转换为世界坐标
+
 

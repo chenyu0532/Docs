@@ -145,6 +145,12 @@ cc.loader.release(resTexture);
 
 26. 帧动画拉伸(一个连线效果，资源是帧动画，长度只有10*10，如果2个连线的点距离过长，如何把10*10的帧动画变成距离所需的长度。例如变成10*100.)
    修改cc.AnimationClip.curveData4
+
+27. 获取网络json
+    比正常的http修改了
+    if (cc.sys.isNative) {
+        xhr.setRequestHeader('Accept-Encoding', 'text/html; charset=UTF-8')
+    }
     
     
     
