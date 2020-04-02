@@ -62,7 +62,23 @@
 	this.role.x += this.speed * Math.sin(hudu);//////sin cos等这些参数是弧度...
 	this.role.y += this.speed * Math.cos(hudu);
 
-4. 各种坐标转换
+4. destroy()后发生的事情-----
+        this.testNode = new cc.Node();
+        this.testNode.state = 'default';
+        this.node.addChild(this.testNode);
+    Node在destroy()后并不会立即发生变化，得等下一帧的时候才有变化
+
+    在当前帧里：它的自定义属性不会消失(console.log(this.testNode.state)--->default)
+               node的引用依然存在 (console.log(this.testNode)-->[Object Object])
+               console.log(cc.isValid(this.testNode))--->true
+
+    在下一帧里：node的引用依然存在 (console.log(this.testNode)-->[Object Object])
+               但是它的自定义属性会消失(console.log(this.testNode.state)--->undefined)
+               另外console.log(cc.isValid(this.testNode))--->false
+
+    如果想在当前帧里判断是不是destroy()了，那么要用cc.isValid(this.testNode, true)
+
+5. 各种坐标转换
 
 	屏幕坐标系：左上角为原点
 	cocos2d-x和openGL坐标系：左下角为原点
@@ -70,5 +86,13 @@
 	
   //后面传的坐标，是相对于你这个节点的父节点下的坐标
 	A.parent.convertToWorldSpaceAR(A.position); // A的坐标转换为世界坐标
+
+  A.parent.convertToNodeSpaceAR(touchPos); //将touchPos坐标转换到A的父节点的坐标
+    (如果A有子节点B，那么转换的坐标跟B是一个坐标系了)
+
+
+  getComponent(cc.Camera).getCameraToWorldPoint 将一个摄像机坐标系下的点转换到世界坐标系下。
+  getComponent(cc.Camera).getWorldToCameraPoint 将一个世界坐标系下的点转换到摄像机坐标系下。
+
 
 
