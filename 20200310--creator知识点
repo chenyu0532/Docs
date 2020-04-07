@@ -78,7 +78,14 @@
 
     如果想在当前帧里判断是不是destroy()了，那么要用cc.isValid(this.testNode, true)
 
-5. 各种坐标转换
+5.  (1)// 准确判断类型
+    function type(o){
+        let s  = Object.prototype.toString.call(o);
+        return s.slice(s.indexOf(" ") + 1, s.length - 1).toLowerCase();
+    }
+    (2)//或者用Typeof2库
+
+6. 各种坐标转换
 
 	屏幕坐标系：左上角为原点
 	cocos2d-x和openGL坐标系：左下角为原点
