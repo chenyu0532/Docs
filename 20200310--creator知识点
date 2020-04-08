@@ -68,8 +68,8 @@
         this.node.addChild(this.testNode);
     Node在destroy()后并不会立即发生变化，得等下一帧的时候才有变化
 
-    在当前帧里：它的自定义属性不会消失(console.log(this.testNode.state)--->default)
-               node的引用依然存在 (console.log(this.testNode)-->[Object Object])
+    在当前帧里：node的引用依然存在 (console.log(this.testNode)-->[Object Object])
+               它的自定义属性不会消失(console.log(this.testNode.state)--->default)
                console.log(cc.isValid(this.testNode))--->true
 
     在下一帧里：node的引用依然存在 (console.log(this.testNode)-->[Object Object])
