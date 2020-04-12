@@ -23,11 +23,11 @@
       let t = 0.5;
       let n = cc.misc.lerp(from, to, t);
       例子：警报灯闪烁
-      void Update () {
+      void update () {
 
         if (alermOn == true)
         {
-            _light.intensity = Mathf.Lerp(_light.intensity, targetIntensity, Time.deltaTime * intensitySpeed);
+            _light.intensity = cc.misc.lerp(_light.intensity, targetIntensity, Time.deltaTime * intensitySpeed);
             if ((Mathf.Abs(_light.intensity - targetIntensity)) <= 0.05f)//因为线性插值使得fromintensity永远不会与tointensity相等，并且到后来每次变化的    
                  值也会减小
             {//如果达到了这种地步将起始的两个值对调，使灯光渐渐变暗，达到自然的情况
@@ -43,7 +43,14 @@
         }
       }
 
-      //TODO 物体运动  中断  转向
+      //物体运动  中断  转向
+      let touchpos = event.touch.getLocation();
+      this.pos = this.node.convertToNodeSpaceAR(touchpos);
+      update(dt) {
+        this.sp.x = cc.misc.lerp(this.sp.x, this.pos.x, dt * this.speedConstant);
+        this.sp.y = cc.misc.lerp(this.sp.y, this.pos.y, dt * this.speedConstant);
+    }
+
 
 2.  当在做打飞机等类型的游戏时，因为需要控制飞机的四周最大最小坐标
     可以定义几个变量：minXminY: cc.v2(xxxx,yyyy)
@@ -78,7 +85,7 @@
 
     如果想在当前帧里判断是不是destroy()了，那么要用cc.isValid(this.testNode, true)
 
-5.  (1)// 准确判断类型
+5.  (1)// 准确判断数据的类型 boolean object array string等
     function type(o){
         let s  = Object.prototype.toString.call(o);
         return s.slice(s.indexOf(" ") + 1, s.length - 1).toLowerCase();
