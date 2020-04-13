@@ -109,4 +109,47 @@
   getComponent(cc.Camera).getWorldToCameraPoint 将一个世界坐标系下的点转换到摄像机坐标系下。
 
 
+7. 摇杆：
+    //触摸加在了摇杆的背景上
+    clampPos (pos) {
+        let len = pos.mag();
+        if (len > this.maxR) { // 圆的半径
+            let k = this.maxR / len;
+            pos.x *= k;
+            pos.y *= k;
+        }
+    },
+    onTouchMove (e) {
+        let pos = this.node.convertToNodeSpaceAR(e.getLocation());
+        this.clampPos(pos);
+        this.midNode.setPosition(pos.x, pos.y);
+        
+        let r = Math.atan2(pos.y, pos.x);
+        let d = cc.misc.radiansToDegrees(r);
+        this.物体.angle = angle;
+        // 触发回调
+        this.joyCallBack.emit([pos, angle]); 
+    },
+    /** 被触发回调 */
+    playerMoving (vector, angle) {
+        this.vector.x = vector.x;
+        this.vector.y = vector.y;
+        if (angle) {
+            this.node.angle = angle;
+        }
+    },
+    update (dt) {
+        const speed = 0.02;
+        this.node.x += pos.x * speed;
+        this.node.y += pos.y * speed;
+    },
+    //this.joyCallBack.emit([pos, angle]); 这个是自定义了一个回调，会触发自定义的回调playerMoving
+    properties: {
+        /** 摇杆移动回调 */
+        joyCallBack:  {
+            default: [],
+            type: cc.Component.EventHandler,
+        }
+    },
 
+8. 
