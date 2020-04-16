@@ -35,7 +35,8 @@
                 {//当目标数值为高数值时，需要将它换成低数值
                     targetIntensity = lowIntensity;
                 }
-                else if (targetIntensity == lowIntensity)//当目标数值是低数值时，将它换成高数值，如此可实现由高到低由低到高的渐变过程
+            else if (targetIntensity ===lowIntensity)
+            //当目标数值是低数值时，将它换成高数值，如此可实现由高到低由低到高的渐变过程
                 {
                     targetIntensity = heighIntensity;
                 }
@@ -104,9 +105,10 @@
   A.parent.convertToNodeSpaceAR(touchPos); //将touchPos坐标转换到A的父节点的坐标
     (如果A有子节点B，那么转换的坐标跟B是一个坐标系了)
 
-
-  getComponent(cc.Camera).getCameraToWorldPoint 将一个摄像机坐标系下的点转换到世界坐标系下。
-  getComponent(cc.Camera).getWorldToCameraPoint 将一个世界坐标系下的点转换到摄像机坐标系下。
+    // 如果在摄像机下，摄像机的zoomRadio改变了，那么现在的touchPos的点就不是原来zoomRadio=1时候的点了需要用
+    //  getScreenToWorldPoint(touchPos, realPos)来转化
+  getComponent(cc.Camera).getScreenToWorldPoint 将一个摄像机坐标系下的点转换到世界坐标系下。
+  getComponent(cc.Camera).getWorldToScreenPoint 将一个世界坐标系下的点转换到摄像机坐标系下。
 
 
 7. 摇杆：
@@ -125,7 +127,7 @@
         this.midNode.setPosition(pos.x, pos.y);
         
         let r = Math.atan2(pos.y, pos.x);
-        let d = cc.misc.radiansToDegrees(r);
+        let angle = cc.misc.radiansToDegrees(r);
         this.物体.angle = angle;
         // 触发回调
         this.joyCallBack.emit([pos, angle]); 
