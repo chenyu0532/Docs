@@ -108,6 +108,7 @@
     // 如果在摄像机下，摄像机的zoomRadio改变了，那么现在的touchPos的点就不是原来zoomRadio=1时候的点了需要用
     //  getScreenToWorldPoint(touchPos, realPos)来转化
   getComponent(cc.Camera).getScreenToWorldPoint 将一个摄像机坐标系下的点转换到世界坐标系下。
+  
   getComponent(cc.Camera).getWorldToScreenPoint 将一个世界坐标系下的点转换到摄像机坐标系下。
 
 
@@ -154,4 +155,19 @@
         }
     },
 
-8. 
+8. angle = rotation - 90;   Math的参数都需要的是弧度
+    例如：
+        let pos: cc.Vec2 = e.getLocation();
+        let x = pos.x - this.shooter.x;
+        let y = pos.y - this.shooter.y;
+        let radian = Math.atan2(y, x); 
+        // 弧度转角度 0 - 2π -> 0 - 360
+        let degree = cc.misc.radiansToDegrees(radian);
+        console.log(degree);
+        // angle 与原版 rotation 差 90
+        degree -= 90;
+        if (degree < -80 && degree > -180) degree = -80;
+        if (degree > 80 || degree <= -180) degree = 80;
+        return degree;
+
+9. 
