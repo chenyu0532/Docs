@@ -170,4 +170,4 @@
         if (degree > 80 || degree <= -180) degree = 80;
         return degree;
 
-9. 
+9. @property(cc.JsonAsset) levelData: cc.JsonAsset = null; //外部json表格还可以这么用。。。
