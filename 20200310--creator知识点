@@ -171,3 +171,10 @@
         return degree;
 
 9. @property(cc.JsonAsset) levelData: cc.JsonAsset = null; //外部json表格还可以这么用。。。
+
+10. // 改变运动速度 
+    let speed = cc.speed(cc.moveTo(10, cc.p(900, 900)), 1);
+    this.node.runAction(speed);
+    speed.setSpeed(3);
+
+11. 刮刮卡---->见example
