@@ -1,3 +1,4 @@
+
 1. 
     //弧度转为度
       cc.misc.radiansToDegrees(rad);
@@ -176,5 +177,30 @@
     let speed = cc.speed(cc.moveTo(10, cc.p(900, 900)), 1);
     this.node.runAction(speed);
     speed.setSpeed(3);
+    //或者
+    tween.start()之后会出现一个 _finalAction成员。
+	修改_finalAction._speedMethod = true。之后可以通过_finalAction._speed 修改速度。
 
 11. 刮刮卡---->见example
+
+12. async.js是一个异步流程控制的库
+    应用场景1：切换场景时，如果下一个场景的元素过多，需要加一个loading动。
+    	async.parallel([
+         function() {
+             that.loadingN.active = true;
+             that.loadingN.runAction(cc.repeatForever(cc.rotateBy(0.3, 360)));
+         },
+         function() {
+             that.mask.active = true;
+             let _armatureDisplay = that.anim.getComponent(dragonBones.ArmatureDisplay);
+             that._armature = _armatureDisplay.armature();
+             cc.director.preloadScene('game' + common.gameIndex, that.onProgress.bind(that), function(){  
+                 if(common.platform === 'toutiao') {
+                     common.advRecord.startRecorder();
+                 }
+                 cc.director.loadScene('game' + common.gameIndex);
+            });
+         }
+     ], function(err, tx, total) {
+         console.log(tx[0][0])
+     });
