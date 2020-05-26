@@ -184,7 +184,7 @@
 11. 刮刮卡---->见example
 
 12. async.js是一个异步流程控制的库
-    应用场景1：切换场景时，如果下一个场景的元素过多，需要加一个loading动。
+    常用应用场景1：切换场景时，如果下一个场景的元素过多，需要加一个loading动。
     	async.parallel([
          function() {
              that.loadingN.active = true;
@@ -204,3 +204,30 @@
      ], function(err, tx, total) {
          console.log(tx[0][0])
      });
+
+    常用应用场景2：创建大量对象时
+    	let array = new Array(50);
+        let _index = 0;
+        // array不能少
+        // 10代表每帧创建多少个
+        async.eachLimit(array, 10,  (index, cb)  =>  {
+            console.log(index);
+            let itemNode = cc.instantiate(that.testP);
+            that.node.addChild(itemNode);
+            let x = -430 + _index % 10 * 85;
+            let y = 300 - Math.floor(_index / 10) * 85;
+            itemNode.position = cc.v2(x, y);
+            _index++;
+            setTimeout(cb,	0); // 不可缺，暂时不知道为什么
+        });
+
+    常用应用场景3：流程控制，常用在热更新  新手引导中
+    	async.series([
+    		cb => funA,
+    		cb => funB,
+    		cb => funC
+    	], (err)=>{
+    		if (err) {
+    			console.log('失败')
+    		}
+    	})
