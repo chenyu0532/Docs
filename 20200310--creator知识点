@@ -171,6 +171,24 @@
         if (degree > 80 || degree <= -180) degree = 80;
         return degree;
 
+9. 	Math.seed = function(s) {
+	    let m_w  = s;
+	    let m_z  = 987654321;
+	    let mask = 0xffffffff;
+	 
+	    return function () {
+	        m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+	        m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+	 
+	        let result = ((m_z << 16) + m_w) & mask;
+	        result /= 4294967296;
+	        return result + 0.5;
+	    }
+	}
+	//usage  s不变的话，产生的种子也是不变的
+	let myRandomFunction = Math.seed(1234);
+	let randomNumber = myRandomFunction();
+
 9. @property(cc.JsonAsset) levelData: cc.JsonAsset = null; //外部json表格还可以这么用。。。
 
 10. // 改变运动速度 
@@ -230,4 +248,4 @@
     		if (err) {
     			console.log('失败')
     		}
-    	})
+    	})>>>>>>> .r126
