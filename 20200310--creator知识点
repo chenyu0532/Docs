@@ -248,4 +248,42 @@
     		if (err) {
     			console.log('失败')
     		}
-    	})>>>>>>> .r126
+    	})
+
+13. 椭圆运动：
+        this.angle = 0;
+        this.ball._a = 200;
+        this.ball._b = 60;
+        this.ball._angle = 30;
+        this.center = cc.v2(0, 0)
+
+        update(dt){
+            this.angle = (this.angle+2)%360
+            let angle = (this.ball._angle + this.angle+360)%360
+            var a = angle*Math.PI/180
+            var x = this.ball._a*Math.cos(a)+this.center.x;
+            var y = this.ball._b*Math.sin(a)+this.center.y;
+            this.ball.x = x;
+            this.ball.y = y;
+           // this.ball.rotation = 360 - this.getRotation(this.ball.position,cc.v2(x,y)) *180/ Math.PI;
+    },
+
+    getRotation(p1,p2){
+        if(p1.fuzzyEquals(p2)){
+            return 0
+        }
+        if(p1.x==p2.x){
+            return p2.y > p1.y ? Math.PI/2 : Math.PI
+        }
+        var a = Math.abs(Math.atan((p2.y-p1.y)/(p2.x-p1.x)))
+        if(p2.x < p1.x){
+            if(p2.y >p1.y){
+                a = Math.PI - a;
+            } else {
+                a = Math.PI + a;
+            }
+        } else if(p2.y < p1.y){
+            a = Math.PI*2 - a
+        }
+        return a;
+    }
