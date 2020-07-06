@@ -106,6 +106,10 @@
   A.parent.convertToNodeSpaceAR(touchPos); //将touchPos坐标转换到A的父节点的坐标
     (如果A有子节点B，那么转换的坐标跟B是一个坐标系了)
 
+    例如：有Canvas/Player/ABC/123，要获取123相对于Canvas的坐标点：首先转为世界坐标，再转为相对坐标
+    	let v = 123.parent.convertToWorldSpaceAR(123.position);
+    	let v2 = this.canvas.convertToNodeSpaceAR(v);
+
     // 如果在摄像机下，摄像机的zoomRadio改变了，那么现在的touchPos的点就不是原来zoomRadio=1时候的点了需要用
     //  getScreenToWorldPoint(touchPos, realPos)来转化
   getComponent(cc.Camera).getScreenToWorldPoint 将一个摄像机坐标系下的点转换到世界坐标系下。
