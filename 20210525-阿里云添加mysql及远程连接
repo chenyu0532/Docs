@@ -1,0 +1,33 @@
+以 mysql 8.xx为例
+
+1. 下载：rpm -ivh http://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+
+2. 安装：yum install mysql-community-server
+
+成功的话显示 Complete!
+
+3. 修改mysql密码(不修改的话会报错)
+  (1)grep 'temporary password' /var/log/mysqld.log
+      这里会显示系统分配给你的随机密码
+      
+  (2)登录mysql
+      mysql -uroot -p
+      这里需要的密码就是那个随机密码
+      
+  (3)修改密码
+      注：新密码要是 大小写字母、数字、特殊字符组合，至少8位的组合
+      注2：mysql的命令一定要在最后加;  玛德，害我查了半个小时
+      alter user 'root'@'localhost' identified by '新密码';  
+   
+  (4)立即生效
+      flush privileges;
+
+Navicat远程连接
+  1. mysql -uroot -p
+  2. use mysql
+  3. 现在Navicat还连不上，因为host='localhost'，需要修改这个
+      update user set host='%' where user='root' and host='localhost'; ///这个%是允许所有客户端访问，开发时候用这个
+      update user set host='xx.xx.xx.xx' where user='root' and host='localhost'; //这个是指定某一个ip可以访问
+  4. flush privileges;
+  5. 检查服务器防火墙3306端口开放了吗，没开放需要去开放
+     检查一下阿里云的安全组规则中是否开放了3306端口
