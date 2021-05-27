@@ -12,4 +12,6 @@ PHP Version >= 5.3.3                  [OK]
 Extension pcntl check                 [OK]
 Extension posix check                 [fail]
 
-安装posix：
+安装posix：yum --enablerepo=remi-php73 install php-posix -y   (安装模块都要这么安装)
+
+再检测，都ok
