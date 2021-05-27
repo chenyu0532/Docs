@@ -52,3 +52,5 @@ centos中：
 
             // 运行worker
             Worker::runAll();
+            
+      客户端用 域名+端口方式访问
