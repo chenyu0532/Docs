@@ -1,3 +1,54 @@
-centos中：
+workerman开启ssl
+mysql类依赖pdo和pdo_mysql两个扩展
+上面这两步在workerman手册中都有
+    
 
-    把workerman目录直接放到opt里
+centos中：
+    
+    可以把workerman目录直接放到opt里
+    
+    测试下列脚本的时候可能会报这个错误：
+        The server requested authentication method unknown to the client [caching_sha2_password]
+      这是由于mysql8.0身份验证的改变，mysqli库还没有更新，还是5.x的方式，用下面的来解决,
+        use mysql;
+        ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '数据库密码';  ///%的原因是上个脚本里设置的，让Navicat可以访问。如果没有客户端访问的需求，可以写成localhost
+        FLUSH PRIVILEGES;
+    测试脚本：
+        <?php
+            use Workerman\Worker;
+            require_once __DIR__ . '/Autoloader.php';
+            require_once __DIR__ . '/vendor/autoload.php';
+
+            $context = array(
+                'ssl' => array(
+                    'local_cert'  => '/usr/local/nginx/conf/cert/5492148_dsfmnetwork.com.pem', // 证书位置
+                    'local_pk'    => '/usr/local/nginx/conf/cert/5492148_dsfmnetwork.com.key',
+                    'verify_peer' => false,
+                )
+            );
+
+            // 创建一个Worker监听2123端口，使用http协议通讯
+            $http_worker = new Worker("http://0.0.0.0:2123", $context);
+            $http_worker->transport = 'ssl';
+
+            $http_worker->onWorkerStart = function($worker) {
+                global $db;
+                ///////////////////////////////////////////ip            端口    用户      数据库密码   数据库名称
+                $db = new \Workerman\MySQL\Connection('47.105.138.182', '3306', 'root', 'd6x9Y@Ti', 'mytest');
+            };
+            // 启动4个进程对外提供服务
+            $http_worker->count = 1;
+
+            // 接收到浏览器发送的数据时回复hello world给浏览器
+            $http_worker->onMessage = function($connection, $data)
+            {   
+                global $db;
+                //$all_tables = $db->query("show databases"); ///显示数据库名字
+                $all_tables = $db->row("SELECT * FROM `userInfo` WHERE id=1"); ///显示id为xx的一行数据
+                // $all_tables = $db->query("INSERT INTO `userinfo` (`id`, `age`, `username`, `grade`) VALUES (10, 20, '谁', 3)");
+                //$connection->send(json_encode($all_tables));
+                $connection->send(json_encode($all_tables));
+            };
+
+            // 运行worker
+            Worker::runAll();
