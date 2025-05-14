@@ -1,0 +1,34 @@
+1.
+destroyAllchildren()
+const item = instantiate(this.innItemPrefab);
+this.scrollView.content.addChild(item);
+
+item中有监听，监听不能放onLoad中
+
+因为：执行destroy后，在同一帧执行了初始化操作，但是onDestroy是在下一帧执行，也就是说先on了侦听，接着off了
+ 如果在这个时刻有外部的数据传过来就会报错
+
+
+ 2.
+ layout动态改变大小时，会有闪烁的现象
+    解决：如果内容是文本则需要加上
+            xxxx.getComponent(Label).updateRenderData(true);
+            yyy.getComponent(Layout).updateLayout();
+        
+        如果没有文本，则只需加
+            yyy.getComponent(Layout).updateLayout();
+
+
+3.
+热更场景文件，如果里面有节点的opacity为0，则引擎会强制设置为255。原因待查
+
+4. 所有小兵怪兽单位共用一个脚本写好还是每个单位用不同的脚本？
+   对于简单/动作单一的情况，则公用一个脚本即可
+   复杂的情况下，更好的处理方法是：运用组件化的思想，每一种怪物建一个prefab，将不同的功能比如攻击 移动 AI等做成一个个独立的脚本，再根据需求添加到prefab中
+
+5. 节点池回收的时候，循环的话应该从尾到头(可看源码得知原因)
+
+6. 有时候加了widget，但是在游戏中并没有生效，原因是需要下一帧强制刷新下，或者
+    onEnable(){
+        this.node.getComponent(Widget)?.updateAlignment();
+    }
